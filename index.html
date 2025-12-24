@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>The Inner Circle: Strategic Blueprint</title>
+    
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&display=swap" rel="stylesheet">
+
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        serif: ['"Playfair Display"', 'serif'],
+                        sans: ['"Inter"', 'sans-serif'],
+                    },
+                    colors: {
+                        msd: {
+                            teal: '#00857c',
+                            tealLight: '#e0f2f1',
+                            dark: '#004d40',
+                            gold: '#c2922e',
+                            goldLight: '#fdf3e7',
+                            sand: '#f8f9fa',
+                            text: '#1f2937'
+                        }
+                    },
+                    boxShadow: {
+                        'card': '0 10px 40px -10px rgba(0,0,0,0.08)',
+                        'glow': '0 0 25px rgba(0, 133, 124, 0.15)'
+                    }
+                }
+            }
+        }
+    </script>
+
+    <style>
+        body { background-color: #f8f9fa; color: #1f2937; }
+        .slide { display: none; animation: fadeInUp 0.5s cubic-bezier(0.16, 1, 0.3, 1); }
+        .slide.active { display: block; }
+        @keyframes fadeInUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+        
+        .nav-item { transition: all 0.3s; border-left: 3px solid transparent; }
+        .nav-item:hover { background-color: rgba(0, 133, 124, 0.05); }
+        .nav-item.active { border-left-color: #00857c; background-color: white; font-weight: 600; color: #00857c; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+        .source-tag { font-size: 0.65rem; color: #9ca3af; display: block; margin-top: 0.5rem; font-style: italic; text-align: right;}
+
+        /* Logic Matrix Styles */
+        .logic-row { transition: all 0.3s ease; border-left: 4px solid transparent; }
+        .logic-row:hover { background-color: white; border-left-color: #00857c; transform: translateX(5px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+        .tab-btn.active { background-color: #00857c; color: white; border-color: #00857c; }
+        .card-content { display: flex; flex-direction: column; height: 100%; }
+        
+        /* Image Handling */
+        .img-overlay { background: linear-gradient(to top, rgba(0,0,0,0.7) 0%, rgba(0,0,0,0) 100%); }
+        .kol-img { object-fit: cover; object-position: center; transition: transform 0.5s ease; }
+        .kol-container:hover .kol-img { transform: scale(1.05); }
+        
+        /* Engine Flow */
+        .engine-step { position: relative; z-index: 10; }
+        .engine-connector { position: absolute; top: 2rem; left: 0; width: 100%; height: 2px; bg-gray-200; z-index: 0; }
+    </style>
+</head>
+<body class="flex h-screen overflow-hidden relative">
+
+    <!-- Sidebar Navigation -->
+    <aside class="w-72 bg-white border-r border-gray-200 flex flex-col z-20 shadow-lg hidden md:flex">
+        <div class="p-6 border-b border-gray-100 flex flex-col items-center">
+            <!-- MSD Logo -->
+            <img src="https://www.msd-indonesia.com/wp-content/themes/cex-wpvip-mhh-mhh2-mcc-theme/images/msd-logo.svg" alt="MSD Logo" class="h-12 mb-4 w-auto">
+            <div class="text-center w-full">
+                <h1 class="font-serif text-lg font-bold text-msd-dark leading-tight">The Inner Circle</h1>
+                <p class="text-xs text-gray-400 uppercase tracking-widest mt-1">Strategic Blueprint</p>
+            </div>
+        </div>
+
+        <nav class="flex-1 overflow-y-auto py-4 space-y-1">
+            <button onclick="setSlide(0)" class="nav-item active w-full text-left px-6 py-3 text-sm text-gray-600 flex items-center gap-3">
+                <i class="fa-solid fa-bullseye w-4 text-center"></i> The Strategic Pivot
+            </button>
+            <button onclick="setSlide(1)" class="nav-item w-full text-left px-6 py-3 text-sm text-gray-600 flex items-center gap-3">
+                <i class="fa-solid fa-shapes w-4 text-center"></i> The Logic Matrix
+            </button>
+            <button onclick="setSlide(2)" class="nav-item w-full text-left px-6 py-3 text-sm text-gray-600 flex items-center gap-3">
+                <i class="fa-solid fa-users-viewfinder w-4 text-center"></i> Audience & KOLs
+            </button>
+            <button onclick="setSlide(3)" class="nav-item w-full text-left px-6 py-3 text-sm text-gray-600 flex items-center gap-3">
+                <i class="fa-solid fa-network-wired w-4 text-center"></i> The Content Engine
+            </button>
+            <button onclick="setSlide(4)" class="nav-item w-full text-left px-6 py-3 text-sm text-gray-600 flex items-center gap-3">
+                <i class="fa-solid fa-bolt w-4 text-center"></i> Activation Roadmap
+            </button>
+        </nav>
+
+        <div class="p-6 border-t border-gray-100 bg-gray-50 flex flex-col items-center">
+            <p class="text-[0.6rem] text-gray-400 uppercase tracking-widest mb-2">Strategy Prepared By</p>
+            <img src="https://images.glints.com/unsafe/glints-dashboard.oss-ap-southeast-1.aliyuncs.com/company-logo/9a8b8496cde4c7c28571b7c676819468.png" alt="Clabstream Part of Volare" class="h-10 w-auto opacity-90">
+        </div>
+    </aside>
+
+    <!-- Mobile Header -->
+    <div class="md:hidden fixed top-0 w-full bg-white z-50 p-4 border-b flex justify-between items-center">
+        <img src="https://www.msd-indonesia.com/wp-content/themes/cex-wpvip-mhh-mhh2-mcc-theme/images/msd-logo.svg" alt="MSD" class="h-8">
+        <div class="flex gap-2">
+            <button onclick="setSlide(0)" class="p-2 bg-gray-100 rounded text-xs">Start</button>
+            <button onclick="setSlide(3)" class="p-2 bg-gray-100 rounded text-xs">Engine</button>
+            <button onclick="setSlide(4)" class="p-2 bg-gray-100 rounded text-xs">Plan</button>
+        </div>
+    </div>
+
+    <!-- Main Content -->
+    <main class="flex-1 bg-gray-50 overflow-y-auto relative pt-16 md:pt-0 pb-12">
+        <div class="max-w-6xl mx-auto px-6 md:px-10 py-12">
+
+            <!-- SLIDE 0: EXECUTIVE SUMMARY -->
+            <div id="slide-0" class="slide active">
+                <div class="mb-8">
+                    <span class="text-msd-gold font-bold tracking-widest text-xs uppercase">Strategic Executive Summary</span>
+                    <h1 class="font-serif text-4xl md:text-5xl text-msd-dark mt-2 mb-6">Optimizing the Funnel: <br>Why <span class="italic text-msd-teal">Community</span> Must Lead.</h1>
+                    <p class="text-lg text-gray-600 leading-relaxed max-w-3xl">
+                        Current data reveals a critical disconnect: Broad awareness is high (98%), but actionable knowledge is critically low (37%). To convert a <strong>Rp 9.000.000</strong> investment, we must pivot from "Broad Reach" to "Community Depth".
+                    </p>
+                    <span class="source-tag text-left mt-2">Source: Journal Unair, "Cervical Cancer Awareness vs Prevention Knowledge"</span>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 mb-12">
+                    <!-- Current State -->
+                    <div class="bg-white p-6 rounded-xl shadow-card border-l-4 border-gray-300">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="font-bold text-gray-500 text-sm uppercase">The Current Gap</h3>
+                            <span class="bg-gray-100 text-gray-500 px-2 py-1 rounded text-xs font-bold">SILOED</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-gray-500">
+                            <li>
+                                <strong>Global Media:</strong> Reaches the 98% who already know "Cancer exists".
+                                <span class="text-[0.6rem] text-gray-400 block italic">Insight: High Awareness, Low Action (Journal Unair)</span>
+                            </li>
+                            <li>
+                                <strong>Social Media:</strong> Educational posts struggle against the "Free Sex" stigma.
+                                <span class="text-[0.6rem] text-gray-400 block italic">Insight: Stigma remains a barrier (CekFakta Tempo)</span>
+                            </li>
+                        </ul>
+                    </div>
+
+                    <!-- Future State -->
+                    <div class="bg-white p-6 rounded-xl shadow-card border-l-4 border-msd-teal transform md:scale-105 z-10 relative overflow-hidden">
+                        <div class="absolute top-0 right-0 w-24 h-24 bg-msd-teal/10 rounded-full blur-2xl -mr-10 -mt-10"></div>
+                        <div class="flex items-center justify-between mb-4 relative z-10">
+                            <h3 class="font-bold text-msd-teal text-sm uppercase">The Strategic Unlock</h3>
+                            <span class="bg-msd-teal/10 text-msd-teal px-2 py-1 rounded text-xs font-bold">INTEGRATED</span>
+                        </div>
+                        <ul class="space-y-4 text-sm text-gray-700 relative z-10">
+                            <li>
+                                <strong>Activation (CLS):</strong> Uses "Trusted Insiders" (Dave/Iwet) to validate the lifestyle.
+                                <span class="text-[0.6rem] text-gray-400 block italic">Insight: Trust in KOLs > Ads (Instagram Audience Data)</span>
+                            </li>
+                            <li>
+                                <strong>Asset Creation:</strong> Our events generate the "Social Proof" content for Media partners.
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 1: STRATEGIC LOGIC MATRIX (COMPLETED) -->
+            <div id="slide-1" class="slide">
+                <div class="mb-8 flex flex-col md:flex-row justify-between items-end gap-4">
+                    <div>
+                        <h2 class="font-serif text-3xl text-msd-dark">The Logic Matrix</h2>
+                        <p class="text-gray-500 mt-2">Mapping data truths to strategic actions.</p>
+                    </div>
+                    <div class="flex gap-2 bg-white p-1 rounded-lg border border-gray-100 shadow-sm">
+                        <button onclick="switchLogicTab('category')" class="logic-tab-btn active px-4 py-1.5 rounded text-xs font-bold uppercase transition-all border border-transparent">Category</button>
+                        <button onclick="switchLogicTab('consumer')" class="logic-tab-btn px-4 py-1.5 rounded text-xs font-bold uppercase text-gray-400 hover:text-msd-teal transition-all border border-transparent">Consumer</button>
+                        <button onclick="switchLogicTab('brand')" class="logic-tab-btn px-4 py-1.5 rounded text-xs font-bold uppercase text-gray-400 hover:text-msd-teal transition-all border border-transparent">Brand</button>
+                    </div>
+                </div>
+                
+                <!-- Category Tab (Default) -->
+                <div id="logic-category" class="logic-section">
+                    <div class="bg-msd-dark text-white p-4 rounded-t-xl flex justify-between items-center">
+                        <h3 class="font-serif text-xl">1. Category Truth</h3>
+                        <i class="fa-solid fa-layer-group opacity-50"></i>
+                    </div>
+                    <div class="bg-white border border-gray-200 rounded-b-xl p-6 space-y-4 shadow-card">
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Knowledge Gap</p>
+                                <p class="text-xs text-gray-500">98% know "Cancer", 37% know "Vaccine".</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-teal uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>Stop Selling Cancer.</strong> Focus exclusively on the "Lifestyle Solution" (HPV prevention) via education.</p>
+                            </div>
+                        </div>
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Digital Stigma</p>
+                                <p class="text-xs text-gray-500">Conversation is low due to "Free Sex" myths.</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-teal uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>Change the Context.</strong> Move from "Medical/Moral" topics to "Asset/Hygiene" topics using Lifestyle Podcasters.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- Consumer Tab (Populated) -->
+                <div id="logic-consumer" class="logic-section hidden">
+                    <div class="bg-msd-gold text-white p-4 rounded-t-xl flex justify-between items-center">
+                        <h3 class="font-serif text-xl">2. Consumer Truth</h3>
+                        <i class="fa-solid fa-user-tag opacity-50"></i>
+                    </div>
+                    <div class="bg-white border border-gray-200 rounded-b-xl p-6 space-y-4 shadow-card">
+                        <!-- Row 1 -->
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Behavior: Curing > Preventive</p>
+                                <p class="text-xs text-gray-500">Spends on Botox/Treatment, delays Vaccine.</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-gold uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>The "Asset" Frame.</strong> Position vaccine as "Protecting your Beauty Assets" (Lifestyle Budget), not "Buying Medicine" (Health Budget).</p>
+                            </div>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Price Perception</p>
+                                <p class="text-xs text-gray-500">Rp 9 Juta feels "Expensive".</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-gold uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>Price Relativity.</strong> Show that Rp 9 Juta is cheaper than their annual Designer Bag or Botox budget.</p>
+                            </div>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Action Trigger</p>
+                                <p class="text-xs text-gray-500">Trusts Friends/KOLs > Ads.</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-gold uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>Inner Circle Activation.</strong> Use Social Proof (Dave, Iwet, Padel Community) as the trigger, not ads.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Brand Tab (Populated) -->
+                <div id="logic-brand" class="logic-section hidden">
+                    <div class="bg-msd-teal text-white p-4 rounded-t-xl flex justify-between items-center">
+                        <h3 class="font-serif text-xl">3. Brand Truth</h3>
+                        <i class="fa-solid fa-shield-halved opacity-50"></i>
+                    </div>
+                    <div class="bg-white border border-gray-200 rounded-b-xl p-6 space-y-4 shadow-card">
+                        <!-- Row 1 -->
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Efficacy (Gardasil)</p>
+                                <p class="text-xs text-gray-500">Gold Standard (>90% Protection).</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-teal uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>The Silent Partner.</strong> Brand enables life, doesn't shout efficacy. Let the doctor/lab results speak to the efficacy.</p>
+                            </div>
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="logic-row p-4 rounded bg-gray-50 grid md:grid-cols-12 gap-4 items-center">
+                            <div class="md:col-span-4">
+                                <p class="text-[0.6rem] font-bold text-gray-400 uppercase">Data Point</p>
+                                <p class="font-bold text-gray-800 text-sm">Regulatory Constraint</p>
+                                <p class="text-xs text-gray-500">No Direct Promotion allowed.</p>
+                            </div>
+                            <div class="md:col-span-1 text-center text-gray-300 hidden md:block">→</div>
+                            <div class="md:col-span-7">
+                                <p class="text-[0.6rem] font-bold text-msd-teal uppercase">Strategy</p>
+                                <p class="text-sm text-gray-700"><strong>The Trojan Horse.</strong> Use Community Events (Padel/Yoga) as the compliant vehicle. The Brand enters via "Lifestyle", not "Pharma".</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 2: AUDIENCE DEEP DIVE -->
+            <div id="slide-2" class="slide">
+                <div class="mb-8 flex flex-col md:flex-row justify-between md:items-end gap-4">
+                    <div>
+                        <h2 class="font-serif text-3xl text-msd-dark">Targeting the "Payer"</h2>
+                        <p class="text-gray-500 mt-2">Precision targeting based on Income & Influence.</p>
+                    </div>
+                    <div class="md:text-right bg-white p-3 rounded-lg shadow-sm border border-gray-100">
+                        <div class="text-xs text-gray-400 uppercase">Price Point</div>
+                        <div class="font-bold text-msd-teal text-xl">Rp 8.000.000 - 10.000.000</div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-8 items-stretch">
+                    <!-- The Family CFO -->
+                    <div class="bg-white p-8 rounded-xl border-t-4 border-msd-teal shadow-card relative h-full flex flex-col">
+                        <div class="absolute top-4 right-4 bg-msd-teal text-white text-[0.6rem] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Primary Target</div>
+                        <div class="mb-6">
+                            <h3 class="font-serif text-2xl text-gray-900 font-bold">The "Family CFO"</h3>
+                            <p class="text-xs text-gray-500 uppercase mt-1 tracking-wide">Age 30-45 | Sandwich Gen</p>
+                        </div>
+                        <div class="space-y-6 flex-1">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded bg-msd-tealLight flex-shrink-0 flex items-center justify-center text-msd-teal text-sm"><i class="fa-solid fa-wallet"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-800">Wallet Reality</h4>
+                                    <p class="text-xs text-gray-600 mt-1">Controls household budget. Spends <strong>Rp 15Jt+</strong> on Wellness annually.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded bg-msd-tealLight flex-shrink-0 flex items-center justify-center text-msd-teal text-sm"><i class="fa-solid fa-heart-pulse"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-800">The Trigger</h4>
+                                    <p class="text-xs text-gray-600 mt-1"><strong>Responsibility.</strong> Fears "Collapsing" because the family depends on her.</p>
+                                </div>
+                            </div>
+                            
+                            <!-- KOL VISUAL -->
+                            <div class="mt-4 border-t border-gray-100 pt-4">
+                                <p class="text-[0.6rem] text-gray-400 font-bold uppercase mb-2">The Affinity Face</p>
+                                <div class="kol-container h-32 rounded-lg overflow-hidden relative group cursor-pointer">
+                                    <img src="https://cdn.antaranews.com/cache/1200x800/2022/08/16/WhatsApp-Image-2022-08-16-at-9.12.38-AM.jpeg" alt="Indy Barends" class="kol-img w-full h-full">
+                                    <div class="absolute inset-0 img-overlay flex items-end p-3">
+                                        <span class="text-white font-bold text-sm">Indy Barends</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                             <span class="source-tag">Source: A-Neka Indonesia (Sandwich Gen)</span>
+                        </div>
+                    </div>
+
+                    <!-- The Young Pro -->
+                    <div class="bg-gray-100 p-8 rounded-xl border border-gray-200 opacity-90 h-full flex flex-col relative">
+                        <div class="absolute top-4 right-4 bg-gray-300 text-gray-600 text-[0.6rem] font-bold px-3 py-1 rounded-full uppercase tracking-wider">Secondary Target</div>
+                        <div class="mb-6">
+                            <h3 class="font-serif text-2xl text-gray-500 font-bold">The "Young Pro"</h3>
+                            <p class="text-xs text-gray-400 uppercase mt-1 tracking-wide">Age 24-29 | Early Career</p>
+                        </div>
+                        <div class="space-y-6 flex-1">
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-500 text-sm"><i class="fa-solid fa-plane"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-500">Wallet Reality</h4>
+                                    <p class="text-xs text-gray-500 mt-1">Prioritizes "Experiences" (Travel). High price sensitivity.</p>
+                                </div>
+                            </div>
+                            <div class="flex gap-4">
+                                <div class="w-10 h-10 rounded bg-gray-200 flex-shrink-0 flex items-center justify-center text-gray-500 text-sm"><i class="fa-solid fa-mobile-screen"></i></div>
+                                <div>
+                                    <h4 class="font-bold text-sm text-gray-500">The Trigger</h4>
+                                    <p class="text-xs text-gray-500 mt-1"><strong>FOMO & Trends.</strong> Will buy only if it signals "Status".</p>
+                                </div>
+                            </div>
+
+                            <!-- KOL VISUAL -->
+                            <div class="mt-4 border-t border-gray-200 pt-4">
+                                <p class="text-[0.6rem] text-gray-400 font-bold uppercase mb-2">The Affinity Faces</p>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <div class="kol-container h-32 rounded-lg overflow-hidden relative group cursor-pointer">
+                                        <img src="https://upload.wikimedia.org/wikipedia/commons/1/17/Dave_Hendrik_2.jpg" alt="Dave Hendrik" class="kol-img w-full h-full">
+                                        <div class="absolute inset-0 img-overlay flex items-end p-2">
+                                            <span class="text-white font-bold text-xs">Dave Hendrik</span>
+                                        </div>
+                                    </div>
+                                    <div class="kol-container h-32 rounded-lg overflow-hidden relative group cursor-pointer">
+                                        <img src="https://yt3.googleusercontent.com/OBQfyXjgNaB5jUBiE62mLwu-6SB9rePpVMjRJjIQfT8mBWlhhKHn7riE3a6tIOcfQ6NOCK2ZsQ=s900-c-k-c0x00ffffff-no-rj" alt="Iwet Ramadhan" class="kol-img w-full h-full">
+                                        <div class="absolute inset-0 img-overlay flex items-end p-2">
+                                            <span class="text-white font-bold text-xs">Iwet Ramadhan</span>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mt-4">
+                            <span class="source-tag">Source: NielsenIQ 2025</span>
+                       </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 3: CONTENT ENGINE -->
+            <div id="slide-3" class="slide">
+                <div class="mb-8">
+                    <h2 class="font-serif text-3xl text-msd-dark">The Content Supply Chain</h2>
+                    <p class="text-gray-500 mt-2">We don't just run events; we manufacture the assets that power the entire marketing mix.</p>
+                </div>
+
+                <!-- Main Flow -->
+                <div class="bg-white p-8 rounded-xl shadow-card relative overflow-hidden mb-8">
+                    <div class="hidden md:block absolute top-1/2 left-0 w-full h-1 bg-gradient-to-r from-msd-teal/20 via-msd-dark/20 to-msd-gold/20 -z-0 transform -translate-y-1/2"></div>
+
+                    <div class="grid md:grid-cols-4 gap-4 text-center relative z-10">
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                            <div class="w-12 h-12 mx-auto bg-msd-teal text-white rounded-full flex items-center justify-center text-xl font-bold mb-3 shadow-glow"><i class="fa-solid fa-person-running"></i></div>
+                            <h4 class="font-bold text-sm text-msd-dark">1. The Trigger</h4>
+                            <p class="text-[0.65rem] text-gray-500 uppercase tracking-wide mb-2">Activation (CLS)</p>
+                            <p class="text-xs text-gray-600">Real people (KOLs + Target) engaging in Padel, Yoga, & Talkshows.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                            <div class="w-12 h-12 mx-auto bg-msd-dark text-white rounded-full flex items-center justify-center text-xl font-bold mb-3 shadow-lg"><i class="fa-solid fa-camera"></i></div>
+                            <h4 class="font-bold text-sm text-msd-dark">2. The Factory</h4>
+                            <p class="text-[0.65rem] text-gray-500 uppercase tracking-wide mb-2">Content Production</p>
+                            <p class="text-xs text-gray-600">Capturing "FOMO moments," testimonials, & candid visuals.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100">
+                            <div class="w-12 h-12 mx-auto bg-gray-700 text-white rounded-full flex items-center justify-center text-xl font-bold mb-3 shadow-lg"><i class="fa-solid fa-share-nodes"></i></div>
+                            <h4 class="font-bold text-sm text-msd-dark">3. The Reach</h4>
+                            <p class="text-[0.65rem] text-gray-500 uppercase tracking-wide mb-2">Partners (SMM/Media)</p>
+                            <p class="text-xs text-gray-600">They post <strong>OUR</strong> authentic assets instead of generic stock photos.</p>
+                        </div>
+                        <div class="bg-white p-4 rounded-lg shadow-sm border border-gray-100 border-b-4 border-msd-gold">
+                            <div class="w-12 h-12 mx-auto bg-msd-gold text-white rounded-full flex items-center justify-center text-xl font-bold mb-3 shadow-lg"><i class="fa-solid fa-user-doctor"></i></div>
+                            <h4 class="font-bold text-sm text-msd-dark">4. The Patient</h4>
+                            <p class="text-[0.65rem] text-gray-500 uppercase tracking-wide mb-2">Clinic Visit</p>
+                            <p class="text-xs text-gray-600">High-intent leads convert at Partner Clinics (Halodoc).</p>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="grid md:grid-cols-2 gap-6">
+                    <div class="bg-gray-50 p-6 rounded-xl border border-gray-200">
+                        <h4 class="font-serif text-lg text-msd-dark mb-3">Our Deliverables</h4>
+                        <ul class="space-y-3">
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-film text-msd-teal mt-1"></i><div><p class="text-sm font-bold text-gray-700">Vertical Recap Reels</p><p class="text-xs text-gray-500">High-energy cuts of Padel/Roadshows.</p></div></li>
+                            <li class="flex items-start gap-3"><i class="fa-solid fa-quote-left text-msd-teal mt-1"></i><div><p class="text-sm font-bold text-gray-700">Authentic Testimonials</p><p class="text-xs text-gray-500">"Why I invested 9 Million today."</p></div></li>
+                        </ul>
+                    </div>
+                    <div class="bg-msd-teal text-white p-6 rounded-xl shadow-lg flex flex-col justify-center">
+                        <h4 class="font-serif text-lg mb-2">The Value Proposition</h4>
+                        <p class="text-sm opacity-90 leading-relaxed">"We provide the fuel (Content) so the Media Agency's engine (Ads) runs efficiently. <strong>We lower CPA by increasing Trust.</strong>"</p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- SLIDE 4: ACTIVATION ROADMAP -->
+            <div id="slide-4" class="slide">
+                <div class="grid md:grid-cols-3 gap-6 h-full items-stretch">
+                    <!-- Phase 1 -->
+                    <div class="bg-white p-5 rounded-xl shadow-card border-t-4 border-msd-teal flex flex-col h-full group hover:shadow-glow transition-all duration-300">
+                        <div class="mb-3">
+                            <span class="text-xs font-bold text-gray-400 uppercase">Phase 1: Lifestyle</span>
+                            <h3 class="font-serif text-xl font-bold text-msd-dark">"Padel & Pour"</h3>
+                        </div>
+                        <div class="h-40 w-full rounded-lg overflow-hidden mb-4 relative">
+                            <img src="https://manual.co.id/wp-content/uploads/2025/02/05_untitled-2885-Edit_Website-980x719.jpg" alt="Padel" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 img-overlay flex items-end p-3"><p class="text-white text-xs font-bold">Social First Activation</p></div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-sm text-gray-600">VIP Padel tournament hosted by "Geng Ceria". Social-first.</p>
+                            <div class="bg-gray-50 p-2 rounded"><h4 class="text-[0.65rem] font-bold text-msd-teal uppercase mb-1">Data Backing</h4><p class="text-[0.65rem] text-gray-600">Wellness Economy boom (Kadence).</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 2 -->
+                    <div class="bg-white p-5 rounded-xl shadow-card border-t-4 border-msd-dark flex flex-col h-full group hover:shadow-glow transition-all duration-300">
+                        <div class="mb-3">
+                            <span class="text-xs font-bold text-gray-400 uppercase">Phase 2: Rational</span>
+                            <h3 class="font-serif text-xl font-bold text-msd-dark">"Office Roadshow"</h3>
+                        </div>
+                        <div class="h-40 w-full rounded-lg overflow-hidden mb-4 relative">
+                            <img src="https://pict.sindonews.net/dyn/1280/salsabila/photo/2025/04/27/1/65879/perkuat-edukasi-hpv-msd-indonesia-luncurkan-chatbot-ai-nona-di-jakarta-tww.jpg" alt="Roadshow" class="w-full h-full object-cover group-hover:scale-110 transition-transform duration-500">
+                            <div class="absolute inset-0 img-overlay flex items-end p-3"><p class="text-white text-xs font-bold">Corporate Education</p></div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-sm text-gray-600">"Wealth & Wellness" talks at Multinational Banks.</p>
+                            <div class="bg-gray-50 p-2 rounded"><h4 class="text-[0.65rem] font-bold text-msd-dark uppercase mb-1">Data Backing</h4><p class="text-[0.65rem] text-gray-600">Targeting Sandwich Gen (A-Neka).</p></div>
+                        </div>
+                    </div>
+
+                    <!-- Phase 3 -->
+                    <div class="bg-white p-5 rounded-xl shadow-card border-t-4 border-msd-gold flex flex-col h-full group hover:shadow-glow transition-all duration-300">
+                        <div class="mb-3">
+                            <span class="text-xs font-bold text-gray-400 uppercase">Phase 3: Conversion</span>
+                            <h3 class="font-serif text-xl font-bold text-msd-dark">"Concierge Care"</h3>
+                        </div>
+                        <div class="h-40 w-full rounded-lg overflow-hidden mb-4 relative grid grid-cols-2 gap-1">
+                            <img src="https://ik.trn.asia/uploads/2021/03/Aktifitas-Kantor-Halodoc-Panji-2-scaled.jpg" alt="Halodoc" class="w-full h-full object-cover">
+                            <img src="https://foto.kontan.co.id/V4InyOnUgGyqd_7lCjLW6_va3k4=/smart/filters:format(webp)/2025/05/07/1326608290.jpg" alt="Prodia" class="w-full h-full object-cover">
+                            <div class="absolute inset-0 img-overlay flex items-end p-3"><p class="text-white text-xs font-bold">Partner Clinics</p></div>
+                        </div>
+                        <div class="flex-1 space-y-3">
+                            <p class="text-sm text-gray-600">Partnering with Halodoc/Prodia for friction-free booking.</p>
+                            <div class="bg-gray-50 p-2 rounded"><h4 class="text-[0.65rem] font-bold text-msd-gold uppercase mb-1">Data Backing</h4><p class="text-[0.65rem] text-gray-600">Addressing Consumer Inertia (Nielsen).</p></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </main>
+
+    <!-- Confidential Footer -->
+    <footer class="fixed bottom-0 w-full bg-gray-900 text-white text-[10px] py-1 px-6 flex justify-between items-center z-50">
+        <span class="uppercase font-bold tracking-widest text-gray-400">CONFIDENTIAL</span>
+        <span class="text-gray-500">Property of Clabstream x MSD Indonesia &copy; 2025</span>
+    </footer>
+
+    <!-- Logic -->
+    <script>
+        function setSlide(index) {
+            document.querySelectorAll('.nav-item').forEach((btn, i) => {
+                if (i === index) {
+                    btn.classList.add('active');
+                } else {
+                    btn.classList.remove('active');
+                }
+            });
+            document.querySelectorAll('.slide').forEach((slide, i) => {
+                if (i === index) {
+                    slide.classList.add('active');
+                } else {
+                    slide.classList.remove('active');
+                }
+            });
+        }
+
+        function switchLogicTab(tabId) {
+            document.querySelectorAll('.logic-tab-btn').forEach(btn => {
+                btn.classList.remove('active', 'bg-msd-teal', 'text-white', 'border-transparent');
+                btn.classList.add('text-gray-400');
+            });
+            event.target.classList.add('active', 'bg-msd-teal', 'text-white', 'border-transparent');
+            event.target.classList.remove('text-gray-400');
+
+            document.querySelectorAll('.logic-section').forEach(section => {
+                section.classList.add('hidden');
+            });
+            document.getElementById('logic-' + tabId).classList.remove('hidden');
+        }
+
+        document.addEventListener('DOMContentLoaded', () => {
+            setSlide(0);
+        });
+    </script>
+</body>
+</html>
